@@ -28,8 +28,8 @@ export default function Dashboard() {
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Live Dashboard</h1>
-          <p className="text-slate-500">Real-Time Monitoring & Early Warning System</p>
+        <h1 className="text-2xl font-bold text-slate-800">Live Dashboard</h1>
+        <p className="text-slate-500 mt-2">Real-Time Monitoring & Early Warning System - แผนที่แสดงสถานการณ์และการแจ้งเตือนของช้างป่า</p>
         </div>
 
         <div className="bg-white p-2 rounded-lg shadow-sm border border-slate-200 flex items-center gap-2">

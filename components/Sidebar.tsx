@@ -11,9 +11,9 @@ export default function Sidebar() {
   const { threatLevel, statusBar } = useSimulation();
 
   const navItems = [
-    { name: "Live Dashboard", href: "/", icon: Map },
-    { name: "Analytics & CCTV", href: "/analytics", icon: BarChart3 },
-    { name: "System Control", href: "/system", icon: Settings },
+    { name: "หน้าหลัก", href: "/", icon: Map },
+    { name: "จุดวิเคราะห์ และ กล้องวงจรปิด", href: "/analytics", icon: BarChart3 },
+    { name: "แผงควบคุมระบบ", href: "/system", icon: Settings },
   ];
 
   return (
@@ -30,6 +30,7 @@ export default function Sidebar() {
           </h1>
         </div>
         <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3 border-t border-slate-100 pt-2">Elephant Early Warning</p>
+        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3">โดย กรมอุทยานแห่งชาติ สัตว์ป่า และพันธุ์พืช</p>
       </div>
 
       <nav className="flex-1 px-4 space-y-1">
