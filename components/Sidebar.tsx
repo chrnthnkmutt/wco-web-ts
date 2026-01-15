@@ -30,7 +30,8 @@ export default function Sidebar() {
           </h1>
         </div>
         <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3 border-t border-slate-100 pt-2">Elephant Early Warning</p>
-        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3">โดย กรมอุทยานแห่งชาติ สัตว์ป่า และพันธุ์พืช</p>
+        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-3">โดย กรมอุทยานแห่งชาติ สัตว์ป่า</p>
+        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-1">และพันธุ์พืช</p>
       </div>
 
       <nav className="flex-1 px-4 space-y-1">

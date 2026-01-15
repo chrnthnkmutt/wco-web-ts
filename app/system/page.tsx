@@ -1,7 +1,7 @@
 "use client";
 
-import { useSimulation } from "@/context/SimulationContext";
-import { Battery, Signal, Activity, RefreshCw, Power, FileText, Wifi, MapPin } from "lucide-react";
+import { useSimulation, Device } from "@/context/SimulationContext";
+import { Battery, Signal, Activity, RefreshCw, Power, FileText, Wifi } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
 import dynamic from "next/dynamic";
@@ -17,7 +17,7 @@ export default function SystemPage() {
     const [selectedDeviceCoords, setSelectedDeviceCoords] = useState<[number, number] | null>(null);
     const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 
-    const handleRowClick = (device: any) => {
+    const handleRowClick = (device: Device) => {
         setSelectedDeviceCoords(device.coordinates);
         setSelectedDeviceId(device.id);
     };

@@ -1,7 +1,13 @@
 "use client";
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { Camera, RefreshCw } from "lucide-react";
+import { Camera } from "lucide-react";
+import dynamic from 'next/dynamic';
+
+const YoloDetector = dynamic(() => import('@/components/YoloDetector'), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-black flex items-center justify-center text-green-500 font-mono">Loading AI Model...</div>
+});
 
 export default function AnalyticsPage() {
     
@@ -81,26 +87,8 @@ export default function AnalyticsPage() {
                         <span className="text-xs font-mono text-green-600 bg-green-100 px-2 py-1 rounded">CAM-04: LIVE</span>
                     </div>
 
-                    <div className="flex-1 bg-black rounded-lg relative overflow-hidden group">
-                        {/* Placeholder Image simulating Night Vision */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-green-900/20 to-black/80 z-10 pointer-events-none"></div>
-                        
-                        {/* Grid lines */}
-                        <div className="absolute inset-0 opacity-20 pointer-events-none z-10" style={{ backgroundImage: 'linear-gradient(#0f0 1px, transparent 1px), linear-gradient(90deg, #0f0 1px, transparent 1px)', backgroundSize: '100px 100px' }}></div>
-
-                        {/* Content */}
-                        <div className="h-full w-full flex items-center justify-center text-slate-500 bg-slate-900">
-                             <p className="text-sm">Signal Strong. No Motion Detected.</p>
-                        </div>
-
-                        {/* UI Overlay */}
-                        <div className="absolute top-4 left-4 z-20 text-green-500 font-mono text-xs">
-                            REC ● [14-01-2026 23:45:12]
-                        </div>
-                        
-                        <div className="absolute bottom-4 right-4 z-20 flex gap-2">
-                             <button className="bg-slate-800/80 text-white p-2 rounded hover:bg-slate-700"><RefreshCw size={16} /></button>
-                        </div>
+                    <div className="flex-1 bg-black rounded-lg relative overflow-hidden group min-h-[400px]">
+                        <YoloDetector modelPath="/models/best.onnx" imageSrc="/test_image.jpg" />
                     </div>
 
                     <div className="mt-4 grid grid-cols-3 gap-2">
@@ -111,7 +99,7 @@ export default function AnalyticsPage() {
 
                     <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                         <h4 className="text-sm font-bold text-yellow-800 mb-1">AI Detection Log</h4>
-                        <p className="text-xs text-yellow-700">No active threats detected in this sector.</p>
+                        <p className="text-xs text-yellow-700">System actively monitoring sector. AI Model loaded.</p>
                     </div>
                 </div>
             </div>
