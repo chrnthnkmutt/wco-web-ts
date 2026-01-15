@@ -25,9 +25,28 @@ export default function VoiceAssistant() {
   const speak = (text: string) => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
-      const msg = new SpeechSynthesisUtterance(text.replace(/[*#`_]/g, ""));
-      msg.lang = "th-TH";
-      msg.rate = 1.2;
+      
+      // ล้าง Markdown เหมือนเดิม
+      const cleanText = text.replace(/[*#`_]/g, "");
+      const msg = new SpeechSynthesisUtterance(cleanText);
+
+      const voices = window.speechSynthesis.getVoices();
+      
+      const thaiVoice = voices.find(v => 
+        v.lang === 'th-TH' || 
+        v.lang === 'th_TH' || 
+        v.name.toLowerCase().includes('thai')
+      );
+
+      if (thaiVoice) {
+        msg.voice = thaiVoice;
+      } else {
+        msg.lang = "th-TH";
+      }
+
+      msg.rate = 1.1;
+      msg.pitch = 1.1;
+
       window.speechSynthesis.speak(msg);
     }
   };
@@ -64,7 +83,7 @@ export default function VoiceAssistant() {
     
     if (winWithLiff.liff?.isInClient?.() && winWithLiff.liff?.sendMessages) {
       try {
-        // ทำความสะอาดข้อมูลก่อนส่ง ป้องกันค่า undefined หรือ null
+        // clean and default texts
         const safeQuery = (userQuery || "สอบถามด้วยเสียง").trim();
         const safeReply = (aiReply || "ขออภัยจ้า น้องชบาประมวลผลไม่สำเร็จ").trim();
 
