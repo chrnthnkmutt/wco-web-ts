@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export type ThreatLevel = "LOW" | "MEDIUM" | "HIGH";
 export type SimulationMode = "Normal Operations" | "Scenario A: Buffer Breach" | "Scenario B: Critical Threat" | "Scenario C: System Health Check";
@@ -23,12 +23,11 @@ interface SimulationContextType {
   devices: Device[];
   simMode: SimulationMode;
   setSimMode: (mode: SimulationMode) => void;
-  triggerScenario: (mode: SimulationMode) => void;
+  triggerScenario: (mode: SimulationMode) => Promise<void>;
 }
 
 const SimulationContext = createContext<SimulationContextType | undefined>(undefined);
 
-// Synchronized with WCO_Elephant/shared_state.py
 const INITIAL_DEVICES: Device[] = [
   { id: "S-20", type: "Vibration Sensor", status: "Online", battery: 85, coordinates: [14.305, 101.380], last_active: "1 min ago", location_name: "Zone 2" },
   { id: "S-21", type: "Vibration Sensor", status: "Online", battery: 92, coordinates: [14.305, 101.420], last_active: "2 mins ago", location_name: "Zone 2" },
@@ -45,9 +44,7 @@ export const SimulationProvider = ({ children }: { children: ReactNode }) => {
   const [threatLevel, setThreatLevel] = useState<ThreatLevel>("LOW");
   const [statusBar, setStatusBar] = useState("Safe - Wildlife in Forest");
   const [elephantPos, setElephantPos] = useState<[number, number]>([14.32, 101.40]); 
-  const [logs, setLogs] = useState<string[]>([
-    "[09:00:00] System started.",
-  ]);
+  const [logs, setLogs] = useState<string[]>(["[09:00:00] System started."]);
   const [devices, setDevices] = useState<Device[]>(INITIAL_DEVICES);
 
   const addLog = (msg: string) => {
@@ -55,59 +52,51 @@ export const SimulationProvider = ({ children }: { children: ReactNode }) => {
     setLogs((prev) => [`[${timestamp}] ${msg}`, ...prev].slice(0, 50));
   };
 
-  const triggerScenario = (mode: SimulationMode) => {
+  const triggerScenario = async (mode: SimulationMode) => {
     setSimMode(mode);
+
+    let newPos: [number, number] = [14.32, 101.40];
+    let newThreat: ThreatLevel = "LOW";
+    let newStatus = "";
+
+    if (mode === "Scenario A: Buffer Breach") {
+      newPos = [14.30, 101.42]; newThreat = "MEDIUM"; newStatus = "WARNING - Buffer Zone Breach";
+    } else if (mode === "Scenario B: Critical Threat") {
+      newPos = [14.28, 101.44]; newThreat = "HIGH"; newStatus = "CRITICAL - Community Entry Imminent";
+    }
     
-    switch (mode) {
-      case "Normal Operations":
-        setThreatLevel("LOW");
-        setStatusBar("Safe - Wildlife in Forest");
-        setElephantPos([14.32, 101.40]);
-        setDevices(INITIAL_DEVICES);
-        addLog("INFO: Elephant herd spotted in Sector A (Forest).");
-        break;
+    setThreatLevel(newThreat);
+    setStatusBar(newStatus);
+    setElephantPos(newPos);
 
-      case "Scenario A: Buffer Breach":
-        setThreatLevel("MEDIUM");
-        setStatusBar("WARNING - Buffer Zone Breach");
-        setElephantPos([14.30, 101.42]); 
-        setDevices(INITIAL_DEVICES);
-        addLog("ALERT: Vibration Sensor S-20 triggered in Buffer Zone.");
-        break;
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
 
-      case "Scenario B: Critical Threat":
-        setThreatLevel("HIGH");
-        setStatusBar("CRITICAL - Community Entry Imminent");
-        setElephantPos([14.28, 101.44]); 
-        setDevices(INITIAL_DEVICES);
-        addLog("CRITICAL: CCTV 04 - Elephant herd detected moving towards Village C.");
-        break;
-
-      case "Scenario C: System Health Check":
-        setThreatLevel("LOW");
-        setStatusBar("System Maintenance Required");
-        setDevices(INITIAL_DEVICES.map(d => {
-          if (d.id === "Node-4") return { ...d, status: "Offline", battery: 0 };
-          return d;
-        }));
-        addLog("ERR: Low Frequency Radio signal lost on Node 4.");
-        break;
+        try {
+          await fetch('/api/simulate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              lat: newPos[0], 
+              lng: newPos[1], 
+              status: newStatus, 
+              threatLevel: newThreat,
+              userLat,
+              userLng
+            })
+          });
+          console.log("🐘 Server Synced with Real Location");
+        } catch (err) {
+          console.error("Sync Failed", err);
+        }
+      });
     }
   };
 
   return (
-    <SimulationContext.Provider
-      value={{
-        threatLevel,
-        statusBar,
-        elephantPos,
-        logs,
-        devices,
-        simMode,
-        setSimMode,
-        triggerScenario,
-      }}
-    >
+    <SimulationContext.Provider value={{ threatLevel, statusBar, elephantPos, logs, devices, simMode, setSimMode, triggerScenario }}>
       {children}
     </SimulationContext.Provider>
   );
@@ -115,8 +104,6 @@ export const SimulationProvider = ({ children }: { children: ReactNode }) => {
 
 export const useSimulation = () => {
   const context = useContext(SimulationContext);
-  if (!context) {
-    throw new Error("useSimulation must be used within a SimulationProvider");
-  }
+  if (!context) throw new Error("useSimulation must be used within a SimulationProvider");
   return context;
 };
