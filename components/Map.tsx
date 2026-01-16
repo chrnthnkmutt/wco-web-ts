@@ -114,7 +114,7 @@ export default function MapComponent({ flyToTarget }: MapComponentProps) {
             
             <TileLayer
                 attribution='&copy; Google Maps'
-                url="https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+                url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
             />
 
             {/* Zones - Rendered strictly from largest to smallest for layering */}
