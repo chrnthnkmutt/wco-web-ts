@@ -1,5 +1,5 @@
 export const globalElephantState = {
-  elephantPos: [14.32, 101.40] as [number, number],
+  elephantPos: [12.876, 101.815] as [number, number],
   threatLevel: 'LOW' as 'LOW' | 'MEDIUM' | 'HIGH',
   status: 'Normal Operations'
 };

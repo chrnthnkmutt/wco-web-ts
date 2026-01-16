@@ -29,21 +29,21 @@ interface SimulationContextType {
 const SimulationContext = createContext<SimulationContextType | undefined>(undefined);
 
 const INITIAL_DEVICES: Device[] = [
-  { id: "S-20", type: "Vibration Sensor", status: "Online", battery: 85, coordinates: [14.305, 101.380], last_active: "1 min ago", location_name: "Zone 2" },
-  { id: "S-21", type: "Vibration Sensor", status: "Online", battery: 92, coordinates: [14.305, 101.420], last_active: "2 mins ago", location_name: "Zone 2" },
-  { id: "CCTV-04", type: "Camera", status: "Online", battery: 100, coordinates: [14.275, 101.400], last_active: "Live", location_name: "Zone 3" },
-  { id: "Node-4", type: "Gateway", status: "Online", battery: 15, coordinates: [14.330, 101.370], last_active: "5 mins ago", location_name: "Zone 1" },
-  { id: "S-22", type: "Vibration Sensor", status: "Online", battery: 77, coordinates: [14.300, 101.440], last_active: "1 min ago", location_name: "Zone 2" },
-  { id: "CCTV-05", type: "Camera", status: "Online", battery: 100, coordinates: [14.260, 101.410], last_active: "Live", location_name: "Zone 3" },
-  { id: "GW-01", type: "Gateway", status: "Online", battery: 98, coordinates: [14.340, 101.430], last_active: "30 secs ago", location_name: "Zone 1" },
-  { id: "GW-02", type: "Gateway", status: "Online", battery: 99, coordinates: [14.280, 101.360], last_active: "45 secs ago", location_name: "Zone 3" }
+  { id: "S-20", type: "Vibration Sensor", status: "Online", battery: 85, coordinates: [12.874, 101.814], last_active: "1 min ago", location_name: "Zone 2" },
+  { id: "S-21", type: "Vibration Sensor", status: "Online", battery: 92, coordinates: [12.878, 101.818], last_active: "2 mins ago", location_name: "Zone 2" },
+  { id: "CCTV-04", type: "Camera", status: "Online", battery: 100, coordinates: [12.882, 101.822], last_active: "Live", location_name: "Zone 3" },
+  { id: "Node-4", type: "Gateway", status: "Online", battery: 15, coordinates: [12.872, 101.812], last_active: "5 mins ago", location_name: "Zone 1" },
+  { id: "S-22", type: "Vibration Sensor", status: "Online", battery: 77, coordinates: [12.875, 101.819], last_active: "1 min ago", location_name: "Zone 2" },
+  { id: "CCTV-05", type: "Camera", status: "Online", battery: 100, coordinates: [12.884, 101.824], last_active: "Live", location_name: "Zone 3" },
+  { id: "GW-01", type: "Gateway", status: "Online", battery: 98, coordinates: [12.873, 101.813], last_active: "30 secs ago", location_name: "Zone 1" },
+  { id: "GW-02", type: "Gateway", status: "Online", battery: 99, coordinates: [12.886, 101.826], last_active: "45 secs ago", location_name: "Zone 3" }
 ];
 
 export const SimulationProvider = ({ children }: { children: ReactNode }) => {
   const [simMode, setSimMode] = useState<SimulationMode>("Normal Operations");
   const [threatLevel, setThreatLevel] = useState<ThreatLevel>("LOW");
   const [statusBar, setStatusBar] = useState("Safe - Wildlife in Forest");
-  const [elephantPos, setElephantPos] = useState<[number, number]>([14.32, 101.40]); 
+  const [elephantPos, setElephantPos] = useState<[number, number]>([12.876, 101.815]); 
   const [logs, setLogs] = useState<string[]>(["[09:00:00] System started."]);
   const [devices, setDevices] = useState<Device[]>(INITIAL_DEVICES);
 
@@ -55,14 +55,14 @@ export const SimulationProvider = ({ children }: { children: ReactNode }) => {
   const triggerScenario = async (mode: SimulationMode) => {
     setSimMode(mode);
 
-    let newPos: [number, number] = [14.32, 101.40];
+    let newPos: [number, number] = [12.876, 101.815];
     let newThreat: ThreatLevel = "LOW";
     let newStatus = "";
 
     if (mode === "Scenario A: Buffer Breach") {
-      newPos = [14.30, 101.42]; newThreat = "MEDIUM"; newStatus = "WARNING - Buffer Zone Breach";
+      newPos = [12.880, 101.820]; newThreat = "MEDIUM"; newStatus = "WARNING - Buffer Zone Breach";
     } else if (mode === "Scenario B: Critical Threat") {
-      newPos = [14.28, 101.44]; newThreat = "HIGH"; newStatus = "CRITICAL - Community Entry Imminent";
+      newPos = [12.885, 101.825]; newThreat = "HIGH"; newStatus = "CRITICAL - Community Entry Imminent";
     }
     
     setThreatLevel(newThreat);
