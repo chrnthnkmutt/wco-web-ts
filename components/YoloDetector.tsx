@@ -207,13 +207,13 @@ export default function YoloDetector({ imageSrc }: YoloDetectorProps) {
                 </div>
             )}
 
-            {!loading && detections.length > 0 && (
+            {/* {!loading && detections.length > 0 && (
                 <div className="absolute bottom-4 left-4 z-30">
                     <div className="bg-red-500/20 border border-red-500 text-red-100 px-3 py-1 rounded text-xs font-bold animate-pulse">
                         THREAT DETECTED: {detections.length} OBJECT(S)
                     </div>
                 </div>
-            )}
+            )} */}
         </div>
     );
 }
