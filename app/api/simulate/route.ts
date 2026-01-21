@@ -29,8 +29,8 @@ export async function POST(req: Request) {
         "ระบบจำลองสถานการณ์ (Real-time Distance)", 
         distKm,
         status, 
-        userLat || 0, 
-        userLng || 0
+        lat || 0, 
+        lng || 0
       );
     }
     
